@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset=utf-8>
+    <title>backbone file upload</title>
+    <meta http-equiv=content-type content=text/html>
+    <meta http-equiv=X-UA-Compatible content=IE=edge,chrome=1>
+    <link href=file-upload.css type=text/css rel=stylesheet>
+  </head>
+  <body>
+    <form id=main method=post enctype=multipart/form-data>
+      <label class=file-upload>&#8853; Upload!<input type=file name=file /></label>
+      <ul class=log></ul>
+    </form>
+
+    <script src=https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js></script>
+    <script src=http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.1/underscore-min.js></script>
+    <script src=http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.1/backbone-min.js></script>
+    <script src=jquery.iframe-transport.js></script>
+    <script src=file-upload.js></script>
+    <script src=example.js></script>
+  </body>
+</html>
