@@ -14,7 +14,7 @@ label.file-upload input[type=file] {
   filter: alpha(opacity=0);
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   opacity: 0;
-  /*visibility: hidden;*/
+  cursor: pointer;
 }
 /* Customize it yourself! */
 label.file-upload {

@@ -8,7 +8,12 @@
 
   file_upload.Model = Backbone.Model.extend({});
   file_upload.Collection = Backbone.Collection.extend({
-    model: file_upload.Model
+    model: file_upload.Model,
+    initialize: function(options) {
+      options = options || {}
+      this.url = options.url || '/files';
+      return this;
+    }
   });
 
   file_upload.Views.File = Backbone.View.extend({
