@@ -18,7 +18,7 @@
 
   file_upload.Views.File = Backbone.View.extend({
     initialize: function(options) {
-      _.bindAll(this, 'error', 'sending', 'success');
+      _.bindAll(this, 'fail', 'uploading', 'done');
       options = options || {};
       this.url = options.url || '/upload';
       this.data = options.data || {};
@@ -33,26 +33,19 @@
         iframe: true,
         dataType: 'json',
         data: this.data
-      }).always(this.sending)
-        .success(this.success)
-        .error(this.error)
-        .done(this.done);
+      }).always(this.uploading)
+        .done(this.done)
+        .fail(this.fail);
     },
-    success: function(data) {
-      console.log('success', data);
+    done: function(data) {
       this.collection.add(data);
-      this.trigger('success', this.collection);
+      this.trigger('done', this.collection);
     },
-    error: function(data) {
-      console.log('error', data);
+    fail: function(data) {
+      this.trigger('fail', data);
     },
-    sending: function() {
-      console.log('sending');
-      this.trigger('sending');
-    },
-    done: function() {
-      console.log('done');
-      //this.$el.val('');
+    uploading: function() {
+      this.trigger('uploading');
     }
   });
 

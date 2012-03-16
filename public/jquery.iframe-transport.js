@@ -171,13 +171,13 @@
 
           // The first load event gets fired after the iframe has been injected
           // into the DOM, and is used to prepare the actual submission.
-          iframe.bind("load", function() {
+          iframe.on("load", function() {
 
             // The second load event gets fired when the response to the form
             // submission is received. The implementation detects whether the
             // actual payload is embedded in a `<textarea>` element, and
             // prepares the required conversions to be made in that case.
-            iframe.unbind("load").bind("load", function() {
+            iframe.off("load").on("load", function() {
               var doc = this.contentWindow ? this.contentWindow.document :
                 (this.contentDocument ? this.contentDocument : this.document),
                 root = doc.documentElement ? doc.documentElement : doc.body,
@@ -209,7 +209,7 @@
         // aborted.
         abort: function() {
           if (iframe !== null) {
-            iframe.unbind("load").attr("src", "javascript:false;");
+            iframe.off("load").attr("src", "javascript:false;");
             cleanUp();
           }
         }

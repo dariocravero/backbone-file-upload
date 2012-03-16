@@ -19,11 +19,22 @@ label.file-upload input[type=file] {
 /* Customize it yourself! */
 label.file-upload {
   border: 1px solid #575757;
-padding: 5px 10px;
+  padding: 5px 10px;
   width: 70px;
   border-radius: 5px;
 }
 label.file-upload:hover {
   color: white;
   background-color: #575757;
+}
+label.file-upload.disabled {
+  color: #C6C6C6;
+}
+label.file-upload.disabled:hover {
+  color: #C6C6C6;
+  background-color: white;
+}
+span.delete {
+  margin-right: 30px;
+  cursor: pointer;
 }
