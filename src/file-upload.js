@@ -1,3 +1,9 @@
+/* Backbone File Upload v0.1
+ * Copyright 2012, Darío Cravero (dario@qinnova.com.ar | @dariocravero)
+ * jquery-iframe-transport by cmlenz @ http://cmlenz.github.com/jquery-iframe-transport/
+ * modified by Darío Cravero to include error checking.
+ * This library may be freely distributed under the MIT license.
+ */
 (function(window) {
   var Backbone = window.Backbone,
     _ = window._,

@@ -1,3 +1,8 @@
+/* Backbone File Upload's dependency
+ * jquery-iframe-transport by cmlenz @ http://cmlenz.github.com/jquery-iframe-transport/
+ * modified by Darío Cravero to include error checking.
+ * This library may be freely distributed under the MIT license.
+ */
 // This [jQuery](http://jquery.com/) plugin implements an `<iframe>`
 // [transport](http://api.jquery.com/extending-ajax/#Transports) so that
 // `$.ajax()` calls support the uploading of files using standard HTML file
