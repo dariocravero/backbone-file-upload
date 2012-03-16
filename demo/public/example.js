@@ -3,24 +3,22 @@ $(function() {
     main_view = Backbone.View.extend({
       initialize: function() {
         this.collection.fetch();
-        this.collection.on('readonly', this.readonly, this);
         return this;
       },
       events: {
         'click .toggle-readonly': 'toggle_readonly'
       },
       render: function() {
-        this.upload_view = new Backbone.FileUpload.Views.File({
-          el: this.$('.file-upload input[type=file]'),
-          collection: this.collection
+        this.upload_view = new Backbone.FileUpload.Views.LabelFileInput({
+          collection: this.collection,
+          text: '&#8853; Upload!'
         });
         this.upload_view.on('uploading', this.uploading, this);
         this.upload_view.on('done', this.done, this);
         this.upload_view.on('fail', this.fail, this);
-        this.upload_view.on('disabled', this.disable, this);
         this.upload_view.on('enabled', this.enable, this);
         this.upload_view.render();
-        this.readonly(this.collection._readonly);
+        this.upload_view.$el.insertAfter(this.$('.toggle-readonly'));
 
         this.files_view = new list_of_files_view({
           collection: this.collection
@@ -32,11 +30,8 @@ $(function() {
         this.$('.file-upload').addClass('disabled');
         this.$('.log').append('<li>Uploading...</li>');
       },
-      enable: function() {
-        this.$('.file-upload').removeClass('disabled');
-      },
-      disable: function() {
-        this.$('.file-upload').addClass('disabled');
+      enable: function(enabled) {
+        this.$('.file-upload')[enabled ? 'removeClass' : 'addClass']('disabled');
       },
       fail: function(data) {
         console.error(data);
@@ -48,10 +43,9 @@ $(function() {
       },
       toggle_readonly: function(ev) {
         ev.preventDefault();
-        this.collection.readonly(!this.collection._readonly);
-      },
-      readonly: function(enabled) {
-        this.$('.toggle-readonly').text('readonly: ' + enabled);
+        this.upload_view.toggle_enable();
+        this.files_view.toggle_readonly();
+        this.$('.toggle-readonly').text('readonly: ' + this.files_view._readonly);
       }
     }),
     file_view = Backbone.View.extend({
@@ -97,11 +91,12 @@ $(function() {
     list_of_files_view = Backbone.View.extend({
       tagName: 'ul',
       initialize: function(options) {
+        options = options || {};
         _.bindAll(this, 'add');
         this.collection.on('reset', this.render, this);
         this.collection.on('add', this.add, this);
-        this.collection.on('readonly', this.readonly, this);
         this.file_views = [];
+        this._readonly = options.readonly || false;
         return this;
       },
       render: function() {
@@ -110,20 +105,25 @@ $(function() {
       },
       add: function(file) {
         var view = new file_view({model: file, 
-                                 readonly: this.collection._readonly}).render();
+                                 readonly: this._readonly}).render();
         this.$el.append(view.el);
         this.file_views.push(view);
       },
       readonly: function(enabled) {
-        _.invoke(this.file_views, 'readonly', enabled);
+        if (this._readonly != enabled) {
+          this._readonly = enabled;
+          _.invoke(this.file_views, 'readonly', enabled);
+        }
+      },
+      toggle_readonly: function() {
+        this.readonly(!this._readonly);
       }
     });
 
   app = new main_view({
     el: $('#main'),
     collection: new Backbone.FileUpload.Collection(null, {
-      url: '/files',
-      readonly: false
+      url: '/files'
     })
   }).render();
 });
