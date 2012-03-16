@@ -12,6 +12,13 @@
     initialize: function(options) {
       options = options || {}
       this.url = options.url || '/files';
+      this._readonly = options.readonly || false;
+      return this;
+    },
+    readonly: function(enabled) {
+      if (this._readonly != enabled) {
+        this.trigger('readonly', this._readonly = enabled);
+      }
       return this;
     }
   });
@@ -22,20 +29,36 @@
       options = options || {};
       this.url = options.url || '/upload';
       this.data = options.data || {};
+      this.collection.on('readonly', this.readonly, this);
       return this;
     },
     events: {
       'change': 'change'
     },
+    render: function() {
+      this.readonly(this.collection._readonly);
+      return this;
+    },
+    readonly: function(enabled) {
+      if (enabled) {
+        this.$el.attr('disabled', 'disabled');
+        this.trigger('disabled');
+      } else {
+        this.$el.removeAttr('disabled');
+        this.trigger('enabled');
+      }
+    },
     change: function(ev) {
-      $.ajax(this.url, {
-        files: this.$el,
-        iframe: true,
-        dataType: 'json',
-        data: this.data
-      }).always(this.uploading)
-        .done(this.done)
-        .fail(this.fail);
+      if (!this.collection._readonly) {
+        $.ajax(this.url, {
+          files: this.$el,
+          iframe: true,
+          dataType: 'json',
+          data: this.data
+        }).always(this.uploading)
+          .done(this.done)
+          .fail(this.fail);
+      }
     },
     done: function(data, textStatus, jqXHR) {
       this.collection.add(data);

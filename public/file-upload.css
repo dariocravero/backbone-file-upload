@@ -29,6 +29,10 @@ label.file-upload:hover {
 }
 label.file-upload.disabled {
   color: #C6C6C6;
+  cursor: default;
+}
+label.file-upload.disabled input[type=file] {
+  cursor: default;
 }
 label.file-upload.disabled:hover {
   color: #C6C6C6;
