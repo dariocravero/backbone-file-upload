@@ -188,11 +188,21 @@
                   text: type ?
                     textarea.value :
                     root ? (root.textContent || root.innerText) : null
-                };
+                }, status = 200, response;
               cleanUp();
-              completeCallback(200, "OK", content, type ?
-                ("Content-Type: " + type) :
-                null);
+              // Error detection. Read the original comments on why it has to be
+              // implemented like this.
+              // If the call is supposed to fail, this expects a JSON object containing
+              // an error key with a valid HTTP error code. Otherwise, 200 (success) is assumed.
+              try {
+                response = JSON.parse(content.text);
+                status = response.error || 200;
+                // Remove the error key from the response and stringify it again.
+                delete response.error;
+                content.text = JSON.stringify(response);
+              } catch (e) {}
+              completeCallback(status, status == 200 ? "success" : "error", content,
+                               type ? ("Content-Type: " + type) : null);
             });
 
             // Now that the load handler has been set up, submit the form.

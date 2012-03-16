@@ -24,7 +24,8 @@ $(function() {
         this.$('.file-upload').addClass('disabled');
         this.$('.log').append('<li>Uploading...</li>');
       },
-      fail: function() {
+      fail: function(data) {
+        console.error(data);
         this.$('.log').append('<li>Error</li>');
       },
       done: function() {

@@ -37,12 +37,12 @@
         .done(this.done)
         .fail(this.fail);
     },
-    done: function(data) {
+    done: function(data, textStatus, jqXHR) {
       this.collection.add(data);
-      this.trigger('done', this.collection);
+      this.trigger('done', this.collection, data, textStatus, jqXHR);
     },
-    fail: function(data) {
-      this.trigger('fail', data);
+    fail: function(jqXHR) {
+      this.trigger('fail', JSON.parse(jqXHR.responseText), jqXHR);
     },
     uploading: function() {
       this.trigger('uploading');

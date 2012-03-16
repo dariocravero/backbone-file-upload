@@ -18,7 +18,8 @@ post '/upload' do
   p "POST /upload"
   p params[:files].inspect
 
-  #return error 404
+  # Uncomment if you want to see what happens on an error
+  # error 404, {:error => 404, :message => "Something went wrong!"}.to_json
 
   FileUtils.mkdir_p('public/files')
   files = params[:files] || []
