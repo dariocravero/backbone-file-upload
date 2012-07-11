@@ -16,7 +16,7 @@
   file_upload.Collection = Backbone.Collection.extend({
     model: file_upload.Model,
     initialize: function(options) {
-      options = options || {}
+      options = options || {};
       this.url = options.url || '/files';
       return this;
     }
@@ -29,8 +29,8 @@
       this.url = options.url || '/upload';
       this.data = options.data || {};
       this._name = options.name || 'files[]';
-      this._multiple = options.multiple || true;
-      this._enabled = options.enabled || true;
+      this._multiple = options.hasOwnProperty('multiple') ? options.multiple : true;
+      this._enabled = options.hasOwnProperty('enabled') ? options.enabled : true;
       return this;
     },
     tagName: 'input',
@@ -75,13 +75,16 @@
       }
     },
     done: function(data, textStatus, jqXHR) {
+      this.$el.removeClass('loading');
       this.collection.add(data);
       this.trigger('done', this.collection, data, textStatus, jqXHR);
     },
     fail: function(jqXHR) {
+      this.$el.removeClass('loading');
       this.trigger('fail', JSON.parse(jqXHR.responseText), jqXHR);
     },
     uploading: function(data, textStatus, jqXHR) {
+      this.$el.addClass('loading');
       this.trigger('uploading');
       this.$input.val('');
     }
