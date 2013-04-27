@@ -31,6 +31,7 @@
       this._name = options.name || 'files[]';
       this._multiple = options.hasOwnProperty('multiple') ? options.multiple : true;
       this._enabled = options.hasOwnProperty('enabled') ? options.enabled : true;
+      this._accepts = options.hasOwnProperty('accepts') ? options.accepts : undefined;
       return this;
     },
     tagName: 'input',
@@ -44,6 +45,9 @@
       }
       if (!this._enabled) {
         this.$el.attr('disabled', 'disabled');
+      }
+      if(this._accepts) {
+        this.$el.attr('accept', this._accepts);
       }
       this.$input = this.$el;
       return this;
@@ -76,7 +80,9 @@
     },
     done: function(data, textStatus, jqXHR) {
       this.$el.removeClass('loading');
-      this.collection.add(data);
+      if(this.collection) {
+        this.collection.add(data);
+      }
       this.trigger('done', this.collection, data, textStatus, jqXHR);
     },
     fail: function(jqXHR) {
